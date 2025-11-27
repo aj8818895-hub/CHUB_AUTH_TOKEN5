@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Scheherazade+New:wght@700&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body, html, #root { height:100%; background:#000; color:#00ff00; font-family:'Scheherazade New',serif; overflow:hidden; }
+
+.stage-container {
+  min-height:100vh;
+  background:#000;
+  border:6px double #00ff00;
+  box-shadow:0 0 50px #00ff00, inset 0 0 80px rgba(0,255,0,0.2);
+  padding:20px;
+  position:relative;
+}
+
+h1, h2 {
+  text-align:center;
+  font-size:2.5rem;
+  text-shadow:0 0 20px #00ff00;
+  letter-spacing:3px;
+  margin:15px 0;
+}
+
+.btn-jihad {
+  background:#000;
+  color:#00ff00;
+  border:3px solid #00ff00;
+  padding:16px;
+  margin:8px;
+  border-radius:12px;
+  font-family:'Amiri',serif;
+  font-weight:bold;
+  font-size:1.3rem;
+  cursor:pointer;
+  box-shadow:0 0 30px #00ff00;
+  transition:all .3s;
+}
+
+.btn-jihad:hover { background:#00ff00; color:#000; transform:scale(1.1); }
+
+.seed {
+  position:fixed;
+  pointer-events:none;
+  font-size:3rem;
+  animation:fall 5s linear forwards;
+  z-index:9999;
+}
+
+@keyframes fall {
+  from { transform:translateY(-100vh) rotate(0deg); opacity:0; }
+  10% { opacity:1; }
+  to { transform:translateY(110vh) rotate(720deg); opacity:0; }
+}
+
+.footer-conquest {
+  position:fixed;
+  bottom:10px;
+  left:0; right:0;
+  text-align:center;
+  font-size:1.4rem;
+  color:#00ff0088;
+  text-shadow:0 0 15px #00ff00;
+}
