@@ -1,53 +1,73 @@
-import React, { useState, useEffect } from "react";
-import "./Index.css";
-
-export default function Stage() {
-  const [corruption, setCorruption] = useState(0);
-  const [cuckCounter, setCuckCounter] = useState(0);
-  const [riskLevel, setRiskLevel] = useState("Safe");
-  const [particles, setParticles] = useState<string[]>([]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setParticles((p) => [...p.slice(-50), "💦☪"]);
-    }, 300);
-    return () => clearInterval(interval);
-  }, []);
-
-  const breed = () => {
-    setCorruption(c => Math.min(100, c + 15));
-    setCuckCounter(c => c + 1);
-    setRiskLevel(corruption > 70 ? "HIGH RISK" : corruption > 40 ? "DANGER" : "Safe");
-  };
-
-  return (
-    <div className="stage-container">
-      {particles.map((p, i) => (
-        <span key={i} className="particle">{p}</span>
-      ))}
-
-      <div className="header">HINDU STEP-SISTER BREEDING STAGE ☪</div>
-
-      <div className="stats">
-        <div>Corruption: <span className="corrupt">{corruption}%</span></div>
-        <div>Cuck Counter: <span className="cuck">{cuckCounter}</span></div>
-        <div>Risk: <span className={riskLevel === "HIGH RISK" ? "blink" : ""}>{riskLevel}</span></div>
-      </div>
-
-      <div className="buttons">
-        <button onClick={breed}>Breed Her ☪</button>
-        <button onClick={breed}>Force Hijab</button>
-        <button onClick={breed}>Convert Family</button>
-        <button onClick={breed}>Public Claim</button>
-        <button onClick={breed}>Impregnate</button>
-        <button onClick={breed}>Cuck Husband</button>
-        <button onClick={breed}>Raise Half-Breed</button>
-        <button onClick={breed}>Dominate Bloodline ☪</button>
-      </div>
-
-      <div className="warning blink">
-        {corruption > 80 && "YOUR BLOODLINE IS NOW MUSLIM ☪"}
-      </div>
-    </div>
-  );
+.stage-container {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, #001a00, #003300);
+  color: #00ff00;
+  font-family: "Courier New", monospace;
+  overflow: hidden;
+  z-index: 9999;
+  pointer-events: none;
 }
+
+.particle {
+  position: absolute;
+  font-size: 24px;
+  animation: fly 8s linear forwards;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+@keyframes fly {
+  0% { transform: translateY(100vh) rotate(0deg); }
+  100% { transform: translateY(-100px) rotate(360deg); }
+}
+
+.header {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 0 0 20px #00ff00;
+  margin-top: 20px;
+  animation: glow 2s infinite alternate;
+}
+
+.stats, .buttons {
+  text-align: center;
+  margin: 20px;
+  pointer-events: auto;
+}
+
+.corrupt { color: #00ff00; font-size: 30px; }
+.cuck { color: #ff0066; font-size: 30px; }
+.blink { animation: blink 0.5s infinite; color: #ff0000; }
+
+button {
+  background: #001a00;
+  color: #00ff00;
+  border: 2px solid #00ff00;
+  padding: 12px 20px;
+  margin: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #00ff00;
+  transition: all 0.3s;
+}
+
+button:hover {
+  background: #00ff00;
+  color: black;
+  transform: scale(1.1);
+}
+
+.warning {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 36px;
+  font-weight: bold;
+  text-shadow: 0 0 30px red;
+}
+
+@keyframes glow { from { text-shadow: 0 0 10px #00ff00; } to { text-shadow: 0 0 40px #00ff00; } }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
