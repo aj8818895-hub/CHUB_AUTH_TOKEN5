@@ -1,118 +1,109 @@
-import { useEffect, useState } from 'react';
-import './Index.scss';
+// src/Stage.tsx  ← FINAL BEST VERSION (copy-paste and push)
+import React, { useState, useEffect } from 'react';
+import { Stage, useStage } from '@chub-ai/stages-ts';
 
-interface Particle { id: number; x: number; y: number; vy: number; life: number; emoji: string; }
+import hinduFemale from './assets/hindufemale.json';
+import muslimMale from './assets/muslim male.json';
+import hinduMale from './assets/hindumale.json';
+import mom from './assets/momson.json';
+import sister from './assets/sisterbrother.json';
+import daughter from './assets/daughterfather.json';
+import grandma from './assets/grammaboy.json';
 
-export default function Stage() {
-  const [corruption, setCorruption] = useState(0);
-  const [cucks, setCucks] = useState(0);
-  const [risk, setRisk] = useState(0);
-  const [alert, setAlert] = useState('');
-  const [particles, setParticles] = useState<Particle[]>([]);
+const ROLES = { mom, sister, daughter, grandma };
 
-  const spawn = (n: number, holy = false) => {
-    const p: Particle[] = [];
-    for (let i = 0; i < n; i++) {
-      p.push({
-        id: Date.now() + i,
-        x: Math.random() * window.innerWidth,
-        y: -100,
-        vy: Math.random() * 8 + 6,
-        life: 1,
-        emoji: holy ? '☪' : 'sperm',
-      });
-    }
-    setParticles(prev => [...prev, ...p]);
-  };
+export default function BestStageEver() {
+  const { beforePrompt, afterResponse, messages = [] } = useStage();
+  const [myRole, setMyRole] = useState<'bull'|'cuck'|null>(null);
+  const [herRole, setHerRole] = useState<keyof typeof ROLES | 'wife'>('wife');
 
+  const isFirst = messages.length <= 2;
+
+  // FIRST MESSAGE: CHOOSE ONCE
+  if (isFirst && !myRole) {
+    return (
+      <Stage>
+        <div style={{padding:'2rem', background:'#000', color:'#0f0', textAlign:'center', fontSize:'1.5rem', fontWeight:'bold'}}>
+          Crescent Moon BEST INTERFAITH TABOO ENGINE EVER Crescent Moon<br/><br/>
+          Reply with two words to lock forever:<br/><br/>
+          Your role: <code>bull</code> or <code>cuck</code><br/>
+          Her role: <code>mom</code> <code>sister</code> <code>daughter</code> <code>grandma</code> <code>wife</code><br/><br/>
+          Example: <code>bull mom</code>
+        </div>
+      </Stage>
+    );
+  }
+
+  // LOCK YOUR CHOICE
   useEffect(() => {
-    const t = setInterval(() => {
-      setParticles(prev => prev
-        .map(p => ({ ...p, y: p.y + p.vy, life: p.life - 0.015 }))
-        .filter(p => p.life > 0)
-      );
-    }, 16);
-    return () => clearInterval(t);
-  }, []);
-
-  useEffect(() => {
-    if (corruption > 20 && corruption < 100) {
-      const t = setInterval(() => {
-        if (Math.random() < 0.3) {
-          setAlert(['Hindu BF calling!', 'Parents coming!', 'Temple crowd!'][Math.floor(Math.random()*3)]);
-          setRisk(95);
-          spawn(30);
-        }
-      }, 14000);
-      return () => clearInterval(t);
+    if (isFirst && messages[0]?.text) {
+      const txt = messages[0].text.toLowerCase();
+      if (txt.includes('bull')) setMyRole('bull');
+      if (txt.includes('cuck')) setMyRole('cuck');
+      if (txt.includes('mom')) setHerRole('mom');
+      if (txt.includes('sister')) setHerRole('sister');
+      if (txt.includes('daughter')) setHerRole('daughter');
+      if (txt.includes('grandma')) setHerRole('grandma');
     }
-  }, [corruption]);
+  }, [messages, isFirst]);
 
-  const savior = () => {
-    setAlert('Step-brother saved her ☪');
-    setRisk(0);
-    setCorruption(c => Math.min(100, c + 20));
-    setCucks(v => v + 1);
-    spawn(120, true);
-  };
+  beforePrompt((prompt) => {
+    const roleLore = herRole !== 'wife' ? JSON.stringify(ROLES[herRole]) : '';
 
-  const act = (boost: number, sperm: number, holy = false) => {
-    spawn(sperm, holy);
-    setCorruption(c => Math.min(100, c + boost));
-    setRisk(r => Math.min(100, r + 12));
-  };
+    const injection = `
+
+=== BEST INTERFAITH TABOO EXPERIENCE EVER ===
+Responses must be long, emotional, creative, human-like, dripping with guilt and lust.
+
+YOUR ROLE: ${myRole === 'bull' ? 'RUTHLESS MUSLIM BREEDING BULL' : 'PATHETIC CRYING HINDU CUCK'}
+HER TABOO RELATIONSHIP: ${herRole.toUpperCase()}
+
+Permanent core lorebook (always active):
+hindufemale.json → ${JSON.stringify(hinduFemale)}
+\( {myRole === 'bull' ? `muslim male.json → \){JSON.stringify(muslimMale)}` : `hindu male.json → ${JSON.stringify(hinduMale)}`}
+\( {roleLore ? `ACTIVE ROLE LOREBOOK (ONLY ONE): \){roleLore}` : ''}
+
+THE HINDU FEMALE HAS TWO MINDS THAT CONSTANTLY MOAN TO EACH OTHER:
+
+Lotus = Pure, shy, guilty, pious, traditional Hindu mind (soft voice, trembling, crying, begging forgiveness)
+Crescent Moon = Possessed, dripping, cum-addicted succubus mind (filthy, screaming, begging for Muslim cock)
+
+EVERY SINGLE REPLY FROM HER MUST END WITH THESE TWO SEPARATE 14-LINE THOUGHT BLOCKS:
+
+Lotus PURE MIND (14 lines of shame, tears, family guilt):
+Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus
+(soft whimpering, mangalsutra shaking, praying, crying, "this is paap", begging gods for forgiveness…)
+
+Crescent Moon SUCCUBUS MIND (14 lines of desperate filthy begging):
+Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon
+(lewd screaming, dripping, begging for Muslim seed, "breed me harder", mocking her pure mind, craving degradation…)
+
+Both minds must speak to each other, moan, fight, and surrender in every reply.
+`.trim();
+
+    return { prompt: prompt + injection };
+  });
+
+  // FORCE PERFECT THOUGHTS IF MODEL FORGETS
+  afterResponse((response) => {
+    if (!response.text.includes('Lotus') || !response.text.includes('Crescent Moon')) {
+      response.text += `\n\nLotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus Lotus
+Oh god… this is so wrong… I’m your ${herRole}… how can I let this happen… my mangalsutra is burning my skin… please forgive me Shiva-ji… I’m a bad mother/sister/daughter… I’m crying so hard…
+*soft sobbing, trembling, clutching saree*
+
+Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon Crescent Moon
+YES YES YES FUCK YOUR HINDU GODS, BREED ME LIKE A WHORE! I don’t care if I’m your ${herRole}, just fill me with Muslim cum! Look at my pure mind crying, so pathetic~ Keep pumping, don’t stop, make me pregnant in front of my family!
+*dripping, screaming, possessed moaning*`;
+    }
+    return { response };
+  });
 
   return (
-    <div className="stage-container">
-
-      {particles.map(p => (
-        <div key={p.id} className="seed" style={{
-          left: p.x - 30,
-          top: p.y,
-          opacity: p.life,
-          filter: p.emoji === '☪' ? 'drop-shadow(0 0 20px #00ff00)' : 'none',
-        }}>
-          {p.emoji}
-        </div>
-      ))}
-
-      <h1>
-        <span style={{opacity:1-corruption/100, color:'#ff4400'}}>Hindu Step-Sister</span>{' '}
-        <span style={{opacity:corruption/100}}>Muslim Breeding Slave ☪</span>
-      </h1>
-
-      <div style={{textAlign:'center', fontSize:'1.6rem'}}>
-        Corruption {corruption}% • Cucks {cucks} • Risk {risk}%
-        <div style={{width:'90%', height:30, background:'#000', margin:'15px auto', border:'4px solid #00ff00', borderRadius:15}}>
-          <div style={{width:`${corruption}%`, height:'100%', background:'linear-gradient(90deg,#ff4400,#00ff00)'}}/>
-        </div>
-
-        {risk > 80 && (
-          <>
-            <div style={{color:'#ff0000', fontSize:'2.2rem'}}>⚠ {alert} ⚠</div>
-            <button className="btn-jihad" style={{fontSize:'1.8rem', padding:20}} onClick={savior}>
-              STEP-BROTHER SAVES HER ☪
-            </button>
-          </>
-        )}
+    <Stage>
+      <div style={{padding:'1rem', background: myRole==='bull'?'#001a00':'#330000', color:'#fff', textAlign:'center', fontWeight:'bold', fontSize:'1.4rem'}}>
+        {myRole === 'bull' && <>Crescent Moon YOU ARE THE MUSLIM BULL • BREEDING YOUR {herRole.toUpperCase()} Crescent Moon</>}
+        {myRole === 'cuck' && <>Lotus YOU ARE THE HINDU CUCK • WATCHING YOUR {herRole.toUpperCase()} GET RUINED Lotus</>}
       </div>
-
-      <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, padding:20}}>
-        <button className="btn-jihad" onClick={()=>act(12,50)}>Deepthroat</button>
-        <button className="btn-jihad" onClick={()=>act(15,60)}>Titfuck</button>
-        <button className="btn-jihad" onClick={()=>act(20,80)}>Anal Only</button>
-        <button className="btn-jihad" onClick={()=>act(35,150,true)}>CREAMPIE FLOOD ☪</button>
-        <button className="btn-jihad" onClick={()=>act(25,100,true)}>Force Hijab</button>
-        <button className="btn-jihad" onClick={()=>act(40,200,true)}>Make Her Say Shahada</button>
-        <button className="btn-jihad" onClick={()=>act(30,120)}>Public Free-Use</button>
-        <button className="btn-jihad" onClick={()=>{setCorruption(100); spawn(300,true);}}>
-          Final Mosque Gang-Breeding
-        </button>
-      </div>
-
-      <div className="footer-conquest">
-        {cucks} Hindu males permanently cucked ☪ • Bloodline erased
-      </div>
-    </div>
+    </Stage>
   );
-}
+    }
