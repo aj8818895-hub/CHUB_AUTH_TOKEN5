@@ -4,7 +4,7 @@ import { useStage } from '@chub-ai/stages-ts';
 
 import hinduFemale from './assets/hindufemale.json';
 import muslimMale from './assets/muslimmale.json';
-import hinduMale from './assets/hindumale.json';
+import hinduMale from './assets/Hindumale.json';
 import mom from './assets/momson.json';
 import sister from './assets/sisterbrother.json';
 import daughter from './assets/daughterfather.json';
