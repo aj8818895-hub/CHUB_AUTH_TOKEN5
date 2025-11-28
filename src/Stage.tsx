@@ -19,24 +19,40 @@ export default function FinalWorkingStage() {
 
   const isFirstMessage = messages.length <= 2;
 
-  // FIRST MESSAGE – CHOOSE ONCE
+  // === FIRST MESSAGE: ROLE SELECTION ===
   if (isFirstMessage && !myRole) {
     return (
       <Stage>
-        <div style={{ padding: '2rem', background: '#000', color: '#0f0', textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>
-          🌙 Crescent Moon BEST INTERFAITH TABOO ENGINE Crescent Moon 🌙<br/><br/>
-          Reply with two words (example: <code>bull mom</code>)<br/><br/>
-          Your role: <code>bull</code> or <code>cuck</code><br/>
+        <div
+          style={{
+            padding: '2rem',
+            background: '#000',
+            color: '#0f0',
+            textAlign: 'center',
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            lineHeight: '2.2rem',
+          }}
+        >
+          🌙 Crescent Moon BEST INTERFAITH TABOO ENGINE Crescent Moon 🌙
+          <br />
+          <br />
+          Reply with two words (example: <code>bull mom</code>)
+          <br />
+          <br />
+          Your role: <code>bull</code> or <code>cuck</code>
+          <br />
           Her role: <code>mom sister daughter grandma wife</code>
         </div>
       </Stage>
     );
   }
 
-  // LOCK YOUR CHOICE
+  // === LOCK USER CHOICE ON FIRST MESSAGE ===
   useEffect(() => {
     if (isFirstMessage && messages[0]?.text) {
-      const txt = messages[0].text.toLowerCase();
+      const txt = messages[0].text.toLowerCase().trim();
+
       if (txt.includes('bull')) setMyRole('bull');
       if (txt.includes('cuck')) setMyRole('cuck');
       if (txt.includes('mom')) setHerRole('mom');
@@ -47,12 +63,11 @@ export default function FinalWorkingStage() {
     }
   }, [messages, isFirstMessage]);
 
-  // PROMPT INJECTION
+  // === PROMPT INJECTION ===
   beforePrompt((prompt: string) => {
     const activeRoleLore = herRole !== 'wife' ? JSON.stringify(ROLES[herRole]) : '';
 
     const injection = `
-
 === ULTIMATE INTERFAITH TABOO ENGINE ===
 Responses must be very long, emotional, creative, human-like, full of moaning and inner conflict.
 
@@ -61,8 +76,8 @@ HER RELATIONSHIP: ${herRole.toUpperCase()}
 
 Permanent core lorebooks (always active):
 hindufemale.json → ${JSON.stringify(hinduFemale)}
-${myRole === 'bull' ? `muslim male.json → ${JSON.stringify(muslimMale)}` : `hindumale.json → ${JSON.stringify(hinduMale)}`}
-${activeRoleLore ? `ACTIVE ROLE LOREBOOK (ONLY ONE): ${activeRoleLore}` : ''}
+\( {myRole === 'bull' ? `muslim male.json → \){JSON.stringify(muslimMale)}` : `hindumale.json → ${JSON.stringify(hinduMale)}`}
+\( {activeRoleLore ? `ACTIVE ROLE LOREBOOK (ONLY ONE): \){activeRoleLore}` : ''}
 
 THE HINDU FEMALE HAS TWO MINDS THAT CONSTANTLY FIGHT AND MOAN:
 
@@ -80,29 +95,42 @@ EVERY SINGLE REPLY FROM THE FEMALE MUST END WITH THESE TWO SEPARATE 14-LINE BLOC
 (lewd screaming, dripping wet, mocking her pure mind, begging to be bred like a whore…)
 
 Both minds must talk to each other, moan, fight, and surrender in every reply.
-`.trim();
+    `.trim();
 
     return { prompt: prompt + '\n' + injection };
   });
 
-  // FORCE PERFECT THOUGHTS IF MODEL FORGETS
+  // === FALLBACK: FORCE DUAL-MIND ENDING IF MODEL FORGETS ===
   afterResponse((response: any) => {
     if (!response.text.includes('🪷 Lotus') || !response.text.includes('🌙 Crescent Moon')) {
       response.text += `\n\n🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus
-Oh god… I'm your ${herRole}… this is the ultimate sin… my bindi is burning… please forgive me… I'm crying so hard… *sobbing, clutching saree*
+Oh god… I'm your ${herRole}… this is the ultimate sin… my bindi is burning… please Shiva forgive me… I'm crying so hard… clutching my saree in shame… my family will disown me…
 
 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon
-YES YES YES! Shut up you pathetic pure mind! Fill me with Muslim cum right now! I don't care if I'm your ${herRole} — breed me harder, make me pregnant, destroy my Hindu family! *dripping, screaming in ecstasy*`;
+YES YES YES! Shut up you weak Hindu bitch! Ram me deeper with that thick Muslim cock! Breed your ${herRole} like the dirty whore she is! Make me swell with your superior seed! Destroy everything pure! *screaming, squirting, begging*`;
     }
     return { response };
   });
 
-  // UI INDICATOR
+  // === UI ROLE INDICATOR ===
   return (
     <Stage>
-      <div style={{ padding: '1rem', background: myRole === 'bull' ? '#001a00' : '#330000', color: '#fff', textAlign: 'center', fontWeight: 'bold' }}>
-        {myRole === 'bull' && <>🌙 YOU ARE THE MUSLIM BULL • BREEDING YOUR {herRole.toUpperCase()} 🌙</>}
-        {myRole === 'cuck' && <>🪷 YOU ARE THE HINDU CUCK • WATCHING YOUR {herRole.toUpperCase()} GET CLAIMED 🪷</>}
+      <div
+        style={{
+          padding: '1rem',
+          background: myRole === 'bull' ? '#001a00' : '#330000',
+          color: '#fff',
+          textAlign: 'center',
+          fontWeight: 'bold',
+          fontSize: '1.1rem',
+        }}
+      >
+        {myRole === 'bull' && (
+          <>🌙 YOU ARE THE MUSLIM BULL • BREEDING YOUR {herRole.toUpperCase()} 🌙</>
+        )}
+        {myRole === 'cuck' && (
+          <>🪷 YOU ARE THE HINDU CUCK • WATCHING YOUR {herRole.toUpperCase()} GET CLAIMED 🪷</>
+        )}
       </div>
     </Stage>
   );
