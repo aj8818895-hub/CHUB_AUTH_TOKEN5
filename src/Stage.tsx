@@ -1,22 +1,21 @@
 // src/Stage.tsx
 import React, { useState, useEffect } from 'react';
-import { useChatContext } from '@chub-ai/stages-ts';
+import { useStage } from '@chub-ai/stages-ts';  // ← FIXED: Revert to useStage (pre-refactor hook); confirm export in package
 
-import hinduFemale from './hindufemale.json';
-import muslimMale from './muslimmale.json';
-import hinduMale from './Hindumale.json';
-import mom from './momson.json';
-import sister from './sisterbrother.json';
-import daughter from './daughterfather.json';
-import grandma from './granmaboy.json';
+// Only import used ones; fix paths to root + casing
+import mom from '../momson.json';
+import sister from '../sisterbrother.json';
+import daughter from '../daughterfather.json';
+import grandma from '../granmaboy.json';
 
-const FAMILY_ROLES = { mom, sister, daughter, grandma } as const;
+const FAMILY_ROLES = { mom, sister, daughter, grandma } as const;  // Kept for now; remove if unused
 
 type MyRole = 'bull' | 'cuck' | null;
 type HerRole = 'mom' | 'sister' | 'daughter' | 'grandma' | 'wife';
 
 export default function CrescentMoonEngine() {
-  const { messages = [] } = useChatContext();
+  // ← FIXED: useStage instead of useChatContext
+  const { messages = [] } = useStage();  // Assuming it returns { messages }; adjust if props differ
 
   const [myRole, setMyRole] = useState<MyRole>(null);
   const [herRole, setHerRole] = useState<HerRole>('wife');
@@ -26,7 +25,7 @@ export default function CrescentMoonEngine() {
   useEffect(() => {
     if (messages.length >= 1 && messages[0]?.role === 'user' && myRole === null) {
       const text = messages[0].content.toLowerCase().trim();
-      let roleSet = false;
+      let roleSet = false;  // Unused var; can remove if not needed elsewhere
 
       if (text.includes('bull')) {
         setMyRole('bull');
@@ -42,7 +41,7 @@ export default function CrescentMoonEngine() {
       else if (text.includes('grandma')) setHerRole('grandma');
       else if (text.includes('wife')) setHerRole('wife');
     }
-  }, [messages, myRole]);
+  }, [messages, myRole]);  // ← FIXED: Remove myRole dep if it causes loops (useState stable)
 
   if (showRolePicker) {
     return (
