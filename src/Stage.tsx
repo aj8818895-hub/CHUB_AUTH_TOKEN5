@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { useStage } from '@chub-ai/stages-ts';
 
-import hinduFemale from './assets/hindufemale.json';
-import muslimMale from './assets/muslimmale.json';
-import hinduMale from './assets/Hindumale.json';
-import mom from './assets/momson.json';
-import sister from './assets/sisterbrother.json';
-import daughter from './assets/daughterfather.json';
-import grandma from './assets/grammaboy.json';
+import hinduFemale from './hindufemale.json';
+import muslimMale from './muslimmale.json';
+import hinduMale from './Hindumale.json';
+import mom from './momson.json';
+import sister from './sisterbrother.json';
+import daughter from './daughterfather.json';
+import grandma from './granmaboy.json';
 
 const FAMILY_ROLES = { mom, sister, daughter, grandma } as const;
 
