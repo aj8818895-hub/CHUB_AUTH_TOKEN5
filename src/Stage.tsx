@@ -10,7 +10,7 @@ import sister from './assets/sisterbrother.json';
 import daughter from './assets/daughterfather.json';
 import grandma from './assets/grammaboy.json';
 
-const ROLES = { mom, sister, daughter, grandma };
+const ROLES: Record<string, any> = { mom, sister, daughter, grandma };
 
 export default function FinalWorkingStage() {
   const { beforePrompt, afterResponse, messages = [] } = useStage();
@@ -48,7 +48,7 @@ export default function FinalWorkingStage() {
   }, [messages, isFirstMessage]);
 
   // PROMPT INJECTION
-  beforePrompt((prompt) => {
+  beforePrompt((prompt: string) => {
     const activeRoleLore = herRole !== 'wife' ? JSON.stringify(ROLES[herRole]) : '';
 
     const injection = `
@@ -86,7 +86,7 @@ Both minds must talk to each other, moan, fight, and surrender in every reply.
   });
 
   // FORCE PERFECT THOUGHTS IF MODEL FORGETS
-  afterResponse((response) => {
+  afterResponse((response: any) => {
     if (!response.text.includes('🪷 Lotus') || !response.text.includes('🌙 Crescent Moon')) {
       response.text += `\n\n🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus 🪷 Lotus
 Oh god… I'm your ${herRole}… this is the ultimate sin… my bindi is burning… please forgive me… I'm crying so hard… *sobbing, clutching saree*
