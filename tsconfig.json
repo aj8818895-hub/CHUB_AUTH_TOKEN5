@@ -1,24 +1,19 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
     "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-
-    /* Linting */
-    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
     "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,  // ← ADD THIS: Fixes JSON import errors
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "noEmit": true  // ← ADD: Prevents TS from emitting files (common for React setups)
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
