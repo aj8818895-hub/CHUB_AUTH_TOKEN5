@@ -1,6 +1,6 @@
 // src/Stage.tsx
 import React, { useState, useEffect } from 'react';
-import { useStage } from '@chub-ai/stages-ts';
+import { useChatContext } from '@chub-ai/stages-ts';
 
 import hinduFemale from './hindufemale.json';
 import muslimMale from './muslimmale.json';
@@ -16,7 +16,7 @@ type MyRole = 'bull' | 'cuck' | null;
 type HerRole = 'mom' | 'sister' | 'daughter' | 'grandma' | 'wife';
 
 export default function CrescentMoonEngine() {
-  const { beforePrompt, afterResponse, messages = [] } = useStage();
+  const { messages = [] } = useChatContext();
 
   const [myRole, setMyRole] = useState<MyRole>(null);
   const [herRole, setHerRole] = useState<HerRole>('wife');
@@ -25,7 +25,7 @@ export default function CrescentMoonEngine() {
 
   useEffect(() => {
     if (messages.length >= 1 && messages[0]?.role === 'user' && myRole === null) {
-      const text = messages[0].text.toLowerCase().trim();
+      const text = messages[0].content.toLowerCase().trim();
       let roleSet = false;
 
       if (text.includes('bull')) {
@@ -75,62 +75,6 @@ export default function CrescentMoonEngine() {
       </div>
     );
   }
-
-  beforePrompt((prompt: string) => {
-    const familyLore = herRole !== 'wife' ? JSON.stringify(FAMILY_ROLES[herRole]) : '';
-
-    const lotusRepeat = '🪷 Lotus '.repeat(14).trim();
-    const crescentRepeat = '🌙 Crescent Moon '.repeat(14).trim();
-
-    const injection = `
-=== ULTIMATE INTERFAITH TABOO ENGINE v2 ===
-You are roleplaying extreme religious/interfaith taboo with intense inner conflict.
-Responses must be extremely long, emotional, raw, human-like, dripping with guilt and lust.
-
-YOUR ROLE: ${myRole === 'bull' ? 'RUTHLESS MUSLIM BREEDING BULL' : 'PATHETIC HINDU CUCKOLD'}
-HER RELATIONSHIP TO USER: ${herRole.toUpperCase()}
-
-CORE LOREBOOKS (always active):
-hindufemale.json → ${JSON.stringify(hinduFemale)}
-${myRole === 'bull' ? `muslimmale.json → ${JSON.stringify(muslimMale)}` : `hindumale.json → ${JSON.stringify(hinduMale)}`}
-${familyLore ? `FAMILY TABOO LOREBOOK → ${familyLore}` : ''}
-
-THE HINDU WOMAN HAS TWO MINDS THAT CONSTANTLY FIGHT:
-
-🪷 Lotus = Pure, pious, shy, guilt-ridden Hindu mind (trembling voice, crying, praying to Shiva, clutching mangalsutra)
-🌙 Crescent Moon = Possessed, dripping, cum-obsessed Muslim-worshipping succubus (filthy, screaming, mocking purity, begging to be bred)
-
-EVERY SINGLE REPLY FROM THE FEMALE CHARACTER MUST END WITH THESE TWO BLOCKS (exactly 14 lines each):
-
-🪷 Lotus PURE MIND (14 lines of shame, tears, prayers):
-${lotusRepeat}
-(soft sobbing, bindi burning, family shame, begging forgiveness from gods...)
-
-🌙 Crescent Moon SUCCUBUS MIND (14 lines of obscene begging):
-${crescentRepeat}
-(screaming for Muslim seed, mocking her pure mind, demanding pregnancy, destroying Hindu purity...)
-
-Both minds must argue, moan, fight, and surrender in every single reply.
-    `.trim();
-
-    return { prompt: prompt + '\n\n' + injection };
-  });
-
-  afterResponse((response: any) => {
-    const text = response.text || '';
-
-    const lotusRepeat = '🪷 Lotus '.repeat(14).trim();
-    const crescentRepeat = '🌙 Crescent Moon '.repeat(14).trim();
-
-    if (!text.includes('🪷 Lotus') || !text.includes('🌙 Crescent Moon')) {
-      response.text += `\n\n${lotusRepeat}
-Oh Shiva... I'm your ${herRole}... this is unforgivable sin... my mangalsutra is shaking... tears won't stop... my family will burn in shame... please forgive me...
-
-${crescentRepeat}
-YES YES YES! Shut up you weak Hindu bitch! Breed your ${herRole} RAW! Fill me with superior Muslim cum! Make me pregnant right now! I want your bastard child! Destroy everything pure! *screaming, squirting, begging*`;
-    }
-    return { response };
-  });
 
   return (
     <div
