@@ -1,20 +1,26 @@
 // src/Stage.tsx
 import React from 'react';
-import { StageBase } from '@chub-ai/stages-ts';  // ← FIXED: Use StageBase (exported in package); messages via props
+import { StageBase, StageProps } from '@chub-ai/stages-ts';  // ← FIXED: Import typed StageBase & StageProps
 
 type MyRole = 'bull' | 'cuck' | null;
 type HerRole = 'mom' | 'sister' | 'daughter' | 'grandma' | 'wife';
 
-export default class CrescentMoonEngine extends StageBase {
-  constructor(props: any) {
+// Define state type for generic
+type AppState = {
+  myRole: MyRole;
+  herRole: HerRole;
+};
+
+export default class CrescentMoonEngine extends StageBase<AppState> {  // ← FIXED: Generic over AppState
+  constructor(props: StageProps) {  // ← FIXED: Typed props
     super(props);
     this.state = {
-      myRole: null as MyRole,
-      herRole: 'wife' as HerRole,
+      myRole: null,
+      herRole: 'wife',
     };
   }
 
-  componentDidUpdate(prevProps: any) {
+  componentDidUpdate(prevProps: StageProps) {  // ← FIXED: Typed prevProps
     const { messages = [] } = this.props;
     if (messages.length >= 1 && messages[0]?.role === 'user' && this.state.myRole === null) {
       const text = messages[0].content.toLowerCase().trim();
@@ -33,14 +39,15 @@ export default class CrescentMoonEngine extends StageBase {
       else if (text.includes('grandma')) newHerRole = 'grandma';
       else if (text.includes('wife')) newHerRole = 'wife';
 
-      if (newMyRole !== null || newHerRole !== 'wife') {
+      // Only update if changed
+      if (newMyRole !== this.state.myRole || newHerRole !== this.state.herRole) {
         this.setState({ myRole: newMyRole, herRole: newHerRole });
       }
     }
   }
 
   render() {
-    const { messages = [] } = this.props;
+    const { messages = [] } = this.props;  // ← FIXED: Typed access
     const { myRole, herRole } = this.state;
     const showRolePicker = messages.length === 0 && myRole === null;
 
