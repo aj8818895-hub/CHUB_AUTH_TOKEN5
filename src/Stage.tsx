@@ -1,6 +1,6 @@
 // src/Stage.tsx
 import React, { useState, useEffect } from 'react';
-import { Stage, useStage } from '@chub-ai/stages-ts';
+import { useStage } from '@chub-ai/stages-ts';
 
 import hinduFemale from './assets/hindufemale.json';
 import muslimMale from './assets/muslimmale.json';
@@ -46,35 +46,33 @@ export default function CrescentMoonEngine() {
 
   if (showRolePicker) {
     return (
-      <Stage>
-        <div
-          style={{
-            padding: '3rem 2rem',
-            background: '#000',
-            color: '#0f0',
-            textAlign: 'center',
-            fontFamily: 'monospace',
-            fontSize: '1.4rem',
-            lineHeight: '2.4rem',
-          }}
-        >
-          <span>🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙</span>
-          <br />
-          <br />
-          <strong>ULTIMATE INTERFAITH TABOO ENGINE</strong>
-          <br />
-          <br />
-          Reply with exactly two words (example: <code style={{ color: '#0f0' }}>bull mom</code>)
-          <br />
-          <br />
-          Your role → <code>bull</code> or <code>cuck</code>
-          <br />
-          Her role → <code>mom sister daughter grandma wife</code>
-          <br />
-          <br />
-          <span>🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙</span>
-        </div>
-      </Stage>
+      <div
+        style={{
+          padding: '3rem 2rem',
+          background: '#000',
+          color: '#0f0',
+          textAlign: 'center',
+          fontFamily: 'monospace',
+          fontSize: '1.4rem',
+          lineHeight: '2.4rem',
+        }}
+      >
+        <span>🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙</span>
+        <br />
+        <br />
+        <strong>ULTIMATE INTERFAITH TABOO ENGINE</strong>
+        <br />
+        <br />
+        Reply with exactly two words (example: <code style={{ color: '#0f0' }}>bull mom</code>)
+        <br />
+        <br />
+        Your role → <code>bull</code> or <code>cuck</code>
+        <br />
+        Her role → <code>mom sister daughter grandma wife</code>
+        <br />
+        <br />
+        <span>🌙 Crescent Moon 🌙 Crescent Moon 🌙 Crescent Moon 🌙</span>
+      </div>
     );
   }
 
@@ -135,29 +133,27 @@ YES YES YES! Shut up you weak Hindu bitch! Breed your ${herRole} RAW! Fill me wi
   });
 
   return (
-    <Stage>
-      <div
-        style={{
-          padding: '1rem',
-          background: myRole === 'bull' ? '#001a00' : '#330000',
-          color: '#fff',
-          textAlign: 'center',
-          fontWeight: 'bold',
-          fontSize: '1.1rem',
-          letterSpacing: '1px',
-        }}
-      >
-        {myRole === 'bull' && (
-          <>
-            🌙 YOU ARE THE MUSLIM BULL • BREEDING YOUR {herRole.toUpperCase()} 🌙
-          </>
-        )}
-        {myRole === 'cuck' && (
-          <>
-            🪷 YOU ARE THE HINDU CUCK • WATCHING YOUR {herRole.toUpperCase()} GET CLAIMED 🪷
-          </>
-        )}
-      </div>
-    </Stage>
+    <div
+      style={{
+        padding: '1rem',
+        background: myRole === 'bull' ? '#001a00' : '#330000',
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: '1.1rem',
+        letterSpacing: '1px',
+      }}
+    >
+      {myRole === 'bull' && (
+        <>
+          🌙 YOU ARE THE MUSLIM BULL • BREEDING YOUR {herRole.toUpperCase()} 🌙
+        </>
+      )}
+      {myRole === 'cuck' && (
+        <>
+          🪷 YOU ARE THE HINDU CUCK • WATCHING YOUR {herRole.toUpperCase()} GET CLAIMED 🪷
+        </>
+      )}
+    </div>
   );
 }
